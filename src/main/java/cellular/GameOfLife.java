@@ -88,6 +88,11 @@ public class GameOfLife implements CellAutomaton {
 	public CellState getNextCell(int row, int col) {
 		// TODO
 		CellState status = getCellState(row, col);
+		int neighborsStatus = countNeighbors(row,col, CellState.ALIVE);
+		if (neighborsStatus < 2) status = CellState.DEAD;
+		else if(neighborsStatus == 2 || neighborsStatus == 3) status = CellState.ALIVE;
+		else if(neighborsStatus > 3) status = CellState.DEAD;
+		else if(status.equals(CellState.DEAD) && neighborsStatus == 3) status = CellState.ALIVE;
 		return status;
 	}
 
@@ -111,12 +116,12 @@ public class GameOfLife implements CellAutomaton {
 						// should not count row/col value which we are at
 		for(int i = -1; i < 2; i++) {
 			for (int j = -1; j < 2; j++){
-				if(getCellState(row+i,col+j).equals(CellState.ALIVE)) {
+				if(getCellState(row+i,col+j).equals(state)) {
 					count++;
 				}
 			}
 		}
-		if (getCellState(row,col) == CellState.DEAD) count++;
+		if (!getCellState(row,col).equals(state)) count++;
 		// If CellState which we are at is equal to DEAD, we to add to count due to it starting at -1
 		return count;
 	}
