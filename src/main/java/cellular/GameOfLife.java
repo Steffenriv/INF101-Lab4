@@ -58,31 +58,37 @@ public class GameOfLife implements CellAutomaton {
 	@Override
 	public int numberOfRows() {
 		// TODO
-		return 0;
+		return currentGeneration.numRows();
 	}
 
 	@Override
 	public int numberOfColumns() {
 		// TODO
-		return 0;
+		return currentGeneration.numColumns();
 	}
 
 	@Override
 	public CellState getCellState(int row, int col) {
 		// TODO
-		return null;
+		return currentGeneration.get(row,col);
 	}
 
 	@Override
 	public void step() {
 		IGrid nextGeneration = currentGeneration.copy();
 		// TODO
+		for(int row = 0; row < numberOfRows(); row++) {
+			for(int col = 0; col < numberOfColumns(); col++) {
+				nextGeneration.set(row,col,getNextCell(row,col));
+			}
+		}
 	}
 
 	@Override
 	public CellState getNextCell(int row, int col) {
 		// TODO
-		return null;
+		CellState status = getCellState(row, col);
+		return status;
 	}
 
 	/**
@@ -101,7 +107,18 @@ public class GameOfLife implements CellAutomaton {
 	 */
 	private int countNeighbors(int row, int col, CellState state) {
 		// TODO
-		return 0;
+		int count = -1; //Starting at -1, due to countNeighbors
+						// should not count row/col value which we are at
+		for(int i = -1; i < 2; i++) {
+			for (int j = -1; j < 2; j++){
+				if(getCellState(row+i,col+j).equals(CellState.ALIVE)) {
+					count++;
+				}
+			}
+		}
+		if (getCellState(row,col) == CellState.DEAD) count++;
+		// If CellState which we are at is equal to DEAD, we to add to count due to it starting at -1
+		return count;
 	}
 
 	@Override
